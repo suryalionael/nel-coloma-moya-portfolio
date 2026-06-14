@@ -1,0 +1,9 @@
+.DS_Store
+.claude/
+
+# Source materials used during development — not required for the live site
+source-export/
+assets/Events/
+assets/QuickRN Pics/
+assets/QuickRN Booklet.pdf
+assets/Nel Coloma-Moya CV current.doc
