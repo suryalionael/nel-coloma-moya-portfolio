@@ -638,10 +638,20 @@ html.anim-ready .reveal[data-delay="5"] { transition-delay: .45s; }
   }
 
   /* ---------- QuickRN feature ---------- */
-  .quickrn-logo { display: block; height: clamp(34px, 4vw, 48px); width: auto; margin: clamp(20px,3vw,32px) 0 0; }
+  .quickrn-brand { display: flex; align-items: center; gap: clamp(16px,2.5vw,28px); margin-bottom: 1.2rem; flex-wrap: wrap; }
+  .quickrn-brand h2 { margin: 0; }
+  .quickrn-logo { display: block; height: clamp(40px, 4.5vw, 56px); width: auto; margin: 0; flex-shrink: 0; }
+  @media (max-width: 560px) { .quickrn-brand { flex-direction: column; align-items: flex-start; gap: 14px; } }
   .quickrn-feature { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(32px,5vw,72px); align-items: center; }
   .quickrn-feature__media .img-ph { border-radius: 3px; }
   @media (max-width: 860px) { .quickrn-feature { grid-template-columns: 1fr; } .quickrn-feature__media { max-width: 420px; } }
+
+  /* ---------- QuickRN visual showcase ---------- */
+  .quickrn-showcase { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(16px,2vw,24px); margin-top: clamp(32px,4vw,48px); align-items: start; }
+  .quickrn-showcase .img-ph { border-radius: 3px; }
+  .quickrn-showcase__row { display: grid; grid-template-rows: 1fr 1fr; gap: clamp(16px,2vw,24px); height: 100%; }
+  @media (max-width: 760px) { .quickrn-showcase { grid-template-columns: 1fr; } .quickrn-showcase__row { grid-template-columns: 1fr 1fr; grid-template-rows: none; } }
+  @media (max-width: 480px) { .quickrn-showcase__row { grid-template-columns: 1fr; } }
 
   .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px,2vw,24px); }
   .gallery-grid .img-ph { border-radius: 3px; }
@@ -692,6 +702,17 @@ html.anim-ready .reveal[data-delay="5"] { transition-delay: .45s; }
   .event-gallery__full img { aspect-ratio: 16 / 9; }
   @media (max-width: 640px) { .event-gallery__row { grid-template-columns: 1fr; } }
 
+  /* Poster paired beside the event story — poster supports, doesn't dominate */
+  .event-poster-split { display: grid; grid-template-columns: minmax(160px, 230px) 1fr; gap: clamp(28px,4vw,48px); align-items: center; margin-top: clamp(32px,5vw,56px); }
+  .event-poster-split__media { margin: 0; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .event-poster-split__media img { width: 100%; height: auto; display: block; }
+  .event-poster-split__media figcaption { font-size: 0.8rem; color: var(--ink-faint); padding: 8px 10px; }
+  .event-poster-split__body p { color: var(--ink-soft); margin: 0; }
+  @media (max-width: 700px) {
+    .event-poster-split { grid-template-columns: 1fr; }
+    .event-poster-split__media { max-width: 240px; margin: 0 auto; }
+  }
+
   .event-schedule { list-style: none; margin: clamp(32px,4vw,48px) 0 0; padding: 0; border-top: 1px solid var(--line); }
   .event-schedule li { display: grid; grid-template-columns: 130px 1fr; gap: clamp(16px,3vw,28px); padding: clamp(16px,2vw,22px) 0; border-bottom: 1px solid var(--line); align-items: baseline; }
   .event-schedule .time { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.06em; color: var(--accent-deep); padding-top: 2px; }
@@ -700,3 +721,70 @@ html.anim-ready .reveal[data-delay="5"] { transition-delay: .45s; }
   @media (max-width: 640px) { .event-schedule li { grid-template-columns: 1fr; gap: 4px; } }
 
   .event-reflection { margin-top: clamp(40px,6vw,64px); }
+
+/* ---------- Zoomable posters / lightbox triggers ---------- */
+.zoomable-wrap {
+  display: block; width: 100%; position: relative;
+  margin: 0; padding: 0; border: 0; background: none; cursor: zoom-in;
+  font: inherit; text-align: left;
+}
+.zoomable-wrap::after {
+  content: "\2922"; position: absolute; top: 10px; right: 10px;
+  width: 36px; height: 36px; display: grid; place-items: center;
+  background: rgba(33,31,27,0.6); color: var(--ivory); border-radius: 100px;
+  font-size: 1.1rem; opacity: 0; transform: scale(0.85);
+  transition: opacity .3s var(--ease), transform .3s var(--ease);
+  pointer-events: none;
+}
+.zoomable-wrap:hover::after, .zoomable-wrap:focus-visible::after { opacity: 1; transform: scale(1); }
+.zoomable-wrap:focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 2px; }
+
+/* ---------- Lightbox / document viewer ---------- */
+body.lightbox-open { overflow: hidden; }
+.lightbox-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(20,18,15,0.92);
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(16px,4vw,48px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .35s var(--ease), visibility .35s var(--ease);
+}
+.lightbox-overlay.is-open { opacity: 1; visibility: visible; }
+.lightbox-stage {
+  position: relative; max-width: 100%; max-height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; touch-action: none;
+}
+.lightbox-stage.is-zoomed { cursor: grab; }
+.lightbox-stage.is-dragging { cursor: grabbing; }
+.lightbox-overlay img {
+  max-width: 100%; max-height: 86vh; display: block;
+  border-radius: 2px; box-shadow: var(--shadow-lg);
+  transform-origin: center center;
+  transition: transform .25s var(--ease);
+  user-select: none; -webkit-user-drag: none;
+  transform: scale(0.96); opacity: 0;
+}
+.lightbox-overlay.is-open img { transform: scale(1); opacity: 1; }
+.lightbox-stage.is-dragging img,
+.lightbox-stage.is-zoomed img { transition: none; }
+.lightbox-overlay.is-open .lightbox-stage.is-zoomed img,
+.lightbox-overlay.is-open .lightbox-stage.is-dragging img { transition: transform .25s var(--ease); }
+.lightbox-toolbar { position: absolute; top: clamp(8px,2vw,20px); right: clamp(8px,2vw,20px); display: flex; gap: 10px; z-index: 2; }
+.lightbox-btn {
+  width: 42px; height: 42px; display: grid; place-items: center;
+  background: rgba(250,248,245,0.08); border: 1px solid rgba(250,248,245,0.25);
+  color: var(--ivory); border-radius: 100px; font-size: 1.2rem; line-height: 1;
+  cursor: pointer; transition: background .25s var(--ease), border-color .25s var(--ease);
+}
+.lightbox-btn:hover { background: rgba(250,248,245,0.18); border-color: rgba(250,248,245,0.5); }
+.lightbox-caption {
+  position: absolute; left: 0; right: 0; bottom: clamp(8px,2vw,24px);
+  text-align: center; color: rgba(250,248,245,0.75); font-size: 0.9rem;
+  padding: 0 clamp(60px,8vw,120px); margin: 0; pointer-events: none;
+}
+@media (max-width: 640px) {
+  .lightbox-toolbar { top: 8px; right: 8px; }
+  .lightbox-btn { width: 38px; height: 38px; font-size: 1.05rem; }
+  .lightbox-caption { font-size: 0.82rem; padding: 0 16px; bottom: 8px; }
+}
