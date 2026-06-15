@@ -765,31 +765,39 @@ a.artist-name:hover, a.artist-name:focus-visible { background: var(--accent); co
   .memorial {
     position: relative;
     margin: clamp(56px,9vw,110px) 0;
-    padding: clamp(32px,5vw,56px) clamp(28px,5vw,64px);
+    padding: clamp(28px,4.5vw,48px);
     border: 1px solid var(--line);
     border-left: 3px solid var(--accent);
     border-radius: 3px;
     background: var(--ivory);
     overflow: hidden;
+    display: grid;
+    grid-template-columns: clamp(140px,22vw,220px) 1fr;
+    gap: clamp(24px,4vw,48px);
+    align-items: start;
   }
   .memorial::before {
     content: "\201C"; position: absolute; right: clamp(8px,2vw,28px); top: -0.3em;
     font-family: var(--serif); font-size: clamp(4rem, 9vw, 8rem); line-height: 1;
     color: var(--accent); opacity: 0.12; pointer-events: none;
   }
+  .memorial__photo { margin: 0; }
+  .memorial__photo img {
+    display: block; width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover;
+    border-radius: 3px; border: 1px solid var(--line); box-shadow: var(--shadow-sm);
+  }
+  .memorial__content { position: relative; z-index: 1; }
   .memorial__eyebrow { margin: 0 0 0.6em; color: var(--accent-deep); }
   .memorial__name { font-family: var(--serif); font-size: clamp(1.5rem, 2.8vw, 2.1rem); margin: 0 0 1.1em; }
   .memorial__years { color: var(--ink-soft); font-weight: 400; font-size: 0.68em; letter-spacing: 0.04em; }
-  .memorial__body { position: relative; z-index: 1; max-width: 68ch; }
+  .memorial__body { max-width: 60ch; }
   .memorial__body p { color: var(--ink-soft); margin: 0 0 1.1em; }
   .memorial__body p:last-of-type { margin-bottom: 1.4em; }
-  .memorial__quote {
-    font-family: var(--serif); font-style: italic; color: var(--ink) !important;
-    font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.5;
-    border-left: 2px solid var(--accent); padding-left: clamp(16px,2.5vw,24px);
-    margin: 1.4em 0 1.4em !important;
+  .memorial__quote { font-family: var(--serif); font-style: italic; color: var(--ink); }
+  @media (max-width: 700px) {
+    .memorial { grid-template-columns: 1fr; }
+    .memorial__photo { max-width: 280px; }
   }
-  .memorial > .link-line { position: relative; z-index: 1; }
 
 /* ---------- Zoomable posters / lightbox triggers ---------- */
 .zoomable-wrap {
