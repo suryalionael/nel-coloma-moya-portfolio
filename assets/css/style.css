@@ -92,6 +92,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 section { position: relative; }
 .section { padding-block: clamp(72px, 12vw, 150px); }
 .section--tight { padding-block: clamp(54px, 8vw, 100px); }
+.section--no-pad-bottom { padding-bottom: 0; }
+.section--no-pad-top { padding-top: 0; }
+.section-divider { border: 0; height: 1px; background: var(--line); margin: clamp(40px, 6vw, 64px) 0; }
 .bg-beige { background: var(--beige-2); }
 .bg-paper { background: var(--paper); }
 
@@ -667,12 +670,27 @@ a.artist-name:hover, a.artist-name:focus-visible { background: var(--accent); co
   @media (max-width: 860px) { .quickrn-feature { grid-template-columns: 1fr; } .quickrn-feature__media { max-width: 420px; } }
 
   /* ---------- QuickRN call-to-action ---------- */
-  .quickrn-cta { display: flex; align-items: center; gap: clamp(24px,4vw,40px); margin-top: clamp(40px,6vw,64px); flex-wrap: wrap; }
-  .quickrn-cta__media { width: clamp(110px,16vw,160px); flex-shrink: 0; }
-  .quickrn-cta__media .img-ph { border-radius: 3px; }
-  .quickrn-cta__body { flex: 1; min-width: 220px; }
-  .quickrn-cta__body p { margin: 0 0 1em; }
-  @media (max-width: 480px) { .quickrn-cta { flex-direction: column; align-items: flex-start; } .quickrn-cta__media { width: 140px; } }
+  .quickrn-cta {
+    margin-top: clamp(40px,6vw,64px);
+    padding: clamp(32px,5vw,56px) clamp(28px,4.5vw,64px);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--paper);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(10px,1.5vw,16px);
+  }
+  .quickrn-cta__eyebrow { margin: 0; }
+  .quickrn-cta__lead {
+    font-family: var(--serif);
+    font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+    line-height: 1.35;
+    max-width: 32ch;
+    margin: 0;
+    color: var(--ink);
+  }
 
   .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(14px,2vw,24px); }
   .gallery-grid .img-ph { border-radius: 3px; }
@@ -742,6 +760,36 @@ a.artist-name:hover, a.artist-name:focus-visible { background: var(--accent); co
   @media (max-width: 640px) { .event-schedule li { grid-template-columns: 1fr; gap: 4px; } }
 
   .event-reflection { margin-top: clamp(40px,6vw,64px); }
+
+  /* ---------- In memoriam ---------- */
+  .memorial {
+    position: relative;
+    margin: clamp(56px,9vw,110px) 0;
+    padding: clamp(32px,5vw,56px) clamp(28px,5vw,64px);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 3px;
+    background: var(--ivory);
+    overflow: hidden;
+  }
+  .memorial::before {
+    content: "\201C"; position: absolute; right: clamp(8px,2vw,28px); top: -0.3em;
+    font-family: var(--serif); font-size: clamp(4rem, 9vw, 8rem); line-height: 1;
+    color: var(--accent); opacity: 0.12; pointer-events: none;
+  }
+  .memorial__eyebrow { margin: 0 0 0.6em; color: var(--accent-deep); }
+  .memorial__name { font-family: var(--serif); font-size: clamp(1.5rem, 2.8vw, 2.1rem); margin: 0 0 1.1em; }
+  .memorial__years { color: var(--ink-soft); font-weight: 400; font-size: 0.68em; letter-spacing: 0.04em; }
+  .memorial__body { position: relative; z-index: 1; max-width: 68ch; }
+  .memorial__body p { color: var(--ink-soft); margin: 0 0 1.1em; }
+  .memorial__body p:last-of-type { margin-bottom: 1.4em; }
+  .memorial__quote {
+    font-family: var(--serif); font-style: italic; color: var(--ink) !important;
+    font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.5;
+    border-left: 2px solid var(--accent); padding-left: clamp(16px,2.5vw,24px);
+    margin: 1.4em 0 1.4em !important;
+  }
+  .memorial > .link-line { position: relative; z-index: 1; }
 
 /* ---------- Zoomable posters / lightbox triggers ---------- */
 .zoomable-wrap {
