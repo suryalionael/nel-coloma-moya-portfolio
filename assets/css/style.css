@@ -772,7 +772,7 @@ a.artist-name:hover, a.artist-name:focus-visible { background: var(--accent); co
     background: var(--ivory);
     overflow: hidden;
     display: grid;
-    grid-template-columns: clamp(140px,22vw,220px) 1fr;
+    grid-template-columns: clamp(96px,14vw,150px) 1fr;
     gap: clamp(24px,4vw,48px);
     align-items: start;
   }
@@ -796,7 +796,7 @@ a.artist-name:hover, a.artist-name:focus-visible { background: var(--accent); co
   .memorial__quote { font-family: var(--serif); font-style: italic; color: var(--ink); }
   @media (max-width: 700px) {
     .memorial { grid-template-columns: 1fr; }
-    .memorial__photo { max-width: 280px; }
+    .memorial__photo { max-width: 180px; }
   }
 
 /* ---------- Zoomable posters / lightbox triggers ---------- */
