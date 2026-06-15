@@ -377,6 +377,87 @@ a.artist-name {
 }
 a.artist-name:hover, a.artist-name:focus-visible { background: var(--accent); color: var(--ivory); }
 
+/* Interactive artist-discovery buttons */
+button.artist-name {
+  appearance: none; -webkit-appearance: none; border: 0; cursor: pointer;
+  font: inherit; line-height: inherit; -webkit-tap-highlight-color: transparent;
+  text-decoration: none; transition: background .3s var(--ease), color .3s var(--ease);
+}
+button.artist-name:hover, button.artist-name:focus-visible { background: var(--accent); color: var(--ivory); }
+button.artist-name:focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 2px; }
+
+/* Discovery tooltip */
+.artist-name[data-tooltip] { position: relative; }
+.artist-name[data-tooltip]::after,
+.artist-name[data-tooltip]::before {
+  opacity: 0; pointer-events: none; position: absolute; left: 50%;
+  transition: opacity .2s var(--ease), transform .2s var(--ease); z-index: 30;
+}
+.artist-name[data-tooltip]::after {
+  content: attr(data-tooltip); bottom: calc(100% + 9px); transform: translate(-50%, 4px);
+  background: var(--ink); color: var(--ivory); font-family: var(--sans);
+  font-size: 0.76rem; font-weight: 500; letter-spacing: 0.01em; white-space: nowrap;
+  padding: 5px 11px; border-radius: 4px; box-shadow: var(--shadow-sm);
+}
+.artist-name[data-tooltip]::before {
+  content: ""; bottom: calc(100% + 5px); transform: translate(-50%, 4px);
+  border: 4px solid transparent; border-top-color: var(--ink);
+}
+.artist-name[data-tooltip]:hover::after, .artist-name[data-tooltip]:hover::before,
+.artist-name[data-tooltip]:focus-visible::after, .artist-name[data-tooltip]:focus-visible::before {
+  opacity: 1; transform: translate(-50%, 0);
+}
+@media (hover: none) {
+  .artist-name[data-tooltip]::after, .artist-name[data-tooltip]::before { display: none; }
+}
+
+/* ---------- Artist discovery modal ---------- */
+.artist-modal-overlay {
+  position: fixed; inset: 0; z-index: 200; display: flex; align-items: center; justify-content: center;
+  padding: 24px; background: rgba(33, 31, 27, 0.55); backdrop-filter: blur(3px);
+  opacity: 0; visibility: hidden; transition: opacity .3s var(--ease), visibility .3s var(--ease);
+}
+.artist-modal-overlay.is-open { opacity: 1; visibility: visible; }
+.artist-modal {
+  background: var(--paper); border-radius: 4px; border-top: 3px solid var(--accent);
+  max-width: 560px; width: 100%; max-height: 86vh; overflow-y: auto;
+  padding: clamp(28px,5vw,48px); position: relative; box-shadow: var(--shadow-lg);
+  transform: translateY(16px) scale(0.98); opacity: 0;
+  transition: transform .35s var(--ease), opacity .35s var(--ease);
+}
+.artist-modal-overlay.is-open .artist-modal { transform: translateY(0) scale(1); opacity: 1; }
+.artist-modal__close {
+  position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+  font-size: 1.3rem; line-height: 1; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  transition: background .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+.artist-modal__close:hover, .artist-modal__close:focus-visible {
+  background: var(--accent); color: var(--ivory); border-color: var(--accent);
+}
+.artist-modal__eyebrow {
+  color: var(--accent-deep); font-family: var(--sans); font-size: 0.78rem;
+  letter-spacing: 0.16em; text-transform: uppercase; margin: 0 0 0.7em; padding-right: 40px;
+}
+.artist-modal__name { font-family: var(--serif); font-size: clamp(1.5rem,3vw,2rem); margin: 0 0 0.9em; padding-right: 40px; }
+.artist-modal__disclaimer {
+  font-size: 0.85rem; line-height: 1.6; color: var(--ink-soft); background: var(--accent-tint);
+  border-left: 2px solid var(--accent); padding: 12px 16px; border-radius: 3px; margin: 0 0 1.2em;
+}
+.artist-modal__bio p { color: var(--ink-soft); margin: 0; line-height: 1.7; }
+.artist-modal__link { margin-top: 1.4em; }
+.artist-modal__link[hidden] { display: none; }
+
+body.artist-modal-open { overflow: hidden; }
+
+@media (max-width: 560px) {
+  .artist-modal { padding: 26px 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artist-modal-overlay, .artist-modal { transition: none; }
+}
+
 /* ---------- Timeline ---------- */
 .timeline { position: relative; margin-top: 20px; list-style: none; padding: 0; }
 .timeline::before {
